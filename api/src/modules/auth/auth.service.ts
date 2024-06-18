@@ -19,12 +19,12 @@ export class AuthService {
   private async generateAccessToken(userId: string) {
     const accessToken = await this.jwtService.signAsync({ sub: userId });
 
-    return { accessToken };
+    return accessToken;
   }
 
   async signUp(signUpDto: SignUpDto) {
     const { email, name, password } = signUpDto;
-    const emailTaken = await this.userRepo.findByEmail({
+    const emailTaken = await this.userRepo.findUnique({
       where: { email },
       select: { id: true },
     });
@@ -72,7 +72,7 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto) {
     const { email, password } = signInDto;
-    const user = await this.userRepo.findByEmail({
+    const user = await this.userRepo.findUnique({
       where: { email },
     });
 
